@@ -1,6 +1,7 @@
 package org.christian.Pomodoro.application;
 
 import org.christian.Pomodoro.domain.PomodoroListener;
+import com.vaadin.flow.spring.annotation.UIScope;
 import org.christian.Pomodoro.domain.PomodoroService;
 import org.christian.Pomodoro.domain.PomodoroState;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 @Service
+@UIScope
 public class PomodoroServiceImpl implements PomodoroService {
 
     private int minutes = 25;
