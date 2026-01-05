@@ -18,7 +18,7 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
 
     private final PomodoroState state;
     private Timer timer;
-    // Mantenemos la lista por si acaso quieres varios listeners en el futuro
+  
     private final List<PomodoroListener> listeners = new ArrayList<>();
 
     public PomodoroServiceImpl() {
@@ -34,10 +34,10 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
         return state;
     }
 
-    // --- AQUÍ HEMOS FUSIONADO LA LÓGICA EN LOS NOMBRES CORRECTOS ---
+    
 
     @Override
-    public void start() { // Antes se llamaba startTimer
+    public void start() { 
         if (timer != null) {
             timer.cancel();
         }
@@ -59,7 +59,7 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
     }
 
     @Override
-    public void stop() { // Antes se llamaba stopTimer
+    public void stop() { 
         if (timer != null) {
             timer.cancel();
             timer = null;
@@ -69,7 +69,7 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
     }
 
     @Override
-    public void reset() { // Antes se llamaba resetTimer
+    public void reset() { 
         stop();
         state.setMinutes(25);
         state.setSeconds(0);
@@ -77,7 +77,7 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
     }
 
     @Override
-    public void setCustomTime(int minutes) { // Antes se llamaba setTime
+    public void setCustomTime(int minutes) {
         stop();
         state.setMinutes(minutes);
         state.setSeconds(0);
@@ -85,14 +85,11 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
     }
 
     @Override
-    public void setListener(PomodoroListener listener) { // Antes se llamaba addListener
-        // Limpiamos los anteriores para que solo haya uno (según pide tu interfaz singular)
-        // O simplemente lo añadimos si prefieres soportar varios.
-        // Para cumplir con "set", añadimos este:
+    public void setListener(PomodoroListener listener) {
         listeners.add(listener);
     }
 
-    // --- LÓGICA PRIVADA ---
+   
 
     private void tick() {
         int min = state.getMinutes();
@@ -104,7 +101,7 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
             min--;
             sec = 59;
         } else {
-            stop(); // Llamamos al nuevo nombre
+            stop(); 
         }
 
         state.setMinutes(min);
@@ -120,6 +117,6 @@ public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
 
     @Override
     public void destroy() {
-        stop(); // Llamamos al nuevo nombre
+        stop();
     }
 }
