@@ -16,8 +16,10 @@ import org.christian.Pomodoro.infrastructure.ui.components.StylesUtil;
 import org.christian.Pomodoro.infrastructure.ui.components.TimerDisplay;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.vaadin.flow.component.html.IFrame;
+import com.vaadin.flow.router.PageTitle;
 
 @Route("")
+@PageTitle("Pomodoro-Lofi")
 public class MainView extends VerticalLayout implements PomodoroListener {
 
     private final PomodoroService pomodoroService;
