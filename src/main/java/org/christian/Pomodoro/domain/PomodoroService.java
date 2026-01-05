@@ -1,6 +1,7 @@
 package org.christian.Pomodoro.domain;
 
 public interface PomodoroService {
+    PomodoroState getState();
     void start();
     void stop();
     void reset();

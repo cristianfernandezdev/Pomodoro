@@ -26,7 +26,8 @@ public class TimerDisplay extends Div {
         outerRing.getStyle().set("border-radius", "50%")
                 .set("display", "flex").set("align-items", "center").set("justify-content", "center");
 
-        update(new PomodoroState(25, 0, 25 * 60));
+        // CAMBIA LA LÍNEA DEL ERROR POR ESTA:
+        update(new PomodoroState(25, 0, false));
         add(outerRing);
     }
 

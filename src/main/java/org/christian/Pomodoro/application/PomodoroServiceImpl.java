@@ -1,86 +1,125 @@
 package org.christian.Pomodoro.application;
 
-import org.christian.Pomodoro.domain.PomodoroListener;
 import com.vaadin.flow.spring.annotation.UIScope;
-import org.christian.Pomodoro.domain.PomodoroService;
 import org.christian.Pomodoro.domain.PomodoroState;
+import org.christian.Pomodoro.domain.PomodoroListener;
+import org.christian.Pomodoro.domain.PomodoroService;
+import org.springframework.beans.factory.DisposableBean;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 @Service
 @UIScope
-public class PomodoroServiceImpl implements PomodoroService {
+public class PomodoroServiceImpl implements PomodoroService, DisposableBean {
 
-    private int minutes = 25;
-    private int seconds = 0;
-    private int initialTotalSeconds = 25 * 60;
-
+    private final PomodoroState state;
     private Timer timer;
-    private PomodoroListener listener;
+    // Mantenemos la lista por si acaso quieres varios listeners en el futuro
+    private final List<PomodoroListener> listeners = new ArrayList<>();
 
-    @Override
-    public void setListener(PomodoroListener listener) {
-        this.listener = listener;
+    public PomodoroServiceImpl() {
+        this.state = new PomodoroState();
+        // Configuración inicial
+        this.state.setMinutes(25);
+        this.state.setSeconds(0);
+        this.state.setRunning(false);
     }
 
     @Override
-    public void start() {
-        if (timer != null) return;
+    public PomodoroState getState() {
+        return state;
+    }
+
+    // --- AQUÍ HEMOS FUSIONADO LA LÓGICA EN LOS NOMBRES CORRECTOS ---
+
+    @Override
+    public void start() { // Antes se llamaba startTimer
+        if (timer != null) {
+            timer.cancel();
+        }
 
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                tick();
+                try {
+                    tick();
+                } catch (Exception e) {
+                    System.out.println("Error ignorado en timer: " + e.getMessage());
+                }
             }
         }, 0, 1000);
-    }
 
-    private void tick() {
-        if (seconds > 0) {
-            seconds--;
-        } else if (minutes > 0) {
-            minutes--;
-            seconds = 59;
-        } else {
-            stop();
-            if (listener != null) listener.onFinish();
-            return;
-        }
+        state.setRunning(true);
         notifyUpdate();
     }
 
-    private void notifyUpdate() {
-        if (listener != null) {
-            listener.onTick(new PomodoroState(minutes, seconds, initialTotalSeconds));
-        }
-    }
-
     @Override
-    public void stop() {
+    public void stop() { // Antes se llamaba stopTimer
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
-    }
-
-    @Override
-    public void reset() {
-        stop();
-        this.minutes = 25;
-        this.seconds = 0;
-        this.initialTotalSeconds = 25 * 60;
+        state.setRunning(false);
         notifyUpdate();
     }
 
     @Override
-    public void setCustomTime(int newMinutes) {
+    public void reset() { // Antes se llamaba resetTimer
         stop();
-        this.minutes = newMinutes;
-        this.seconds = 0;
-        this.initialTotalSeconds = newMinutes * 60;
+        state.setMinutes(25);
+        state.setSeconds(0);
         notifyUpdate();
+    }
+
+    @Override
+    public void setCustomTime(int minutes) { // Antes se llamaba setTime
+        stop();
+        state.setMinutes(minutes);
+        state.setSeconds(0);
+        notifyUpdate();
+    }
+
+    @Override
+    public void setListener(PomodoroListener listener) { // Antes se llamaba addListener
+        // Limpiamos los anteriores para que solo haya uno (según pide tu interfaz singular)
+        // O simplemente lo añadimos si prefieres soportar varios.
+        // Para cumplir con "set", añadimos este:
+        listeners.add(listener);
+    }
+
+    // --- LÓGICA PRIVADA ---
+
+    private void tick() {
+        int min = state.getMinutes();
+        int sec = state.getSeconds();
+
+        if (sec > 0) {
+            sec--;
+        } else if (min > 0) {
+            min--;
+            sec = 59;
+        } else {
+            stop(); // Llamamos al nuevo nombre
+        }
+
+        state.setMinutes(min);
+        state.setSeconds(sec);
+        notifyUpdate();
+    }
+
+    private void notifyUpdate() {
+        for (PomodoroListener listener : listeners) {
+            listener.onTick(state);
+        }
+    }
+
+    @Override
+    public void destroy() {
+        stop(); // Llamamos al nuevo nombre
     }
 }
