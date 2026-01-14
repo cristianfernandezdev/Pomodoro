@@ -14,7 +14,7 @@
 
 ## 📸 Vista Previa
 
-![Interfaz de Usuario]()
+![Interfaz de Usuario](Interfaz.png)
 
 
 ---
