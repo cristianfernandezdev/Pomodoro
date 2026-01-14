@@ -1,65 +1,54 @@
 # 🍅 Pomodoro Lofi Focus
 
-![Java](https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=java)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0-green?style=for-the-badge&logo=springboot)
-![Vaadin](https://img.shields.io/badge/Vaadin-Flow-00b4f0?style=for-the-badge&logo=vaadin)
-![Docker](https://img.shields.io/badge/Docker-Enabled-blue?style=for-the-badge&logo=docker)
-![Status](https://img.shields.io/badge/Deploy-Render-success?style=for-the-badge&logo=render)
+![Java](https://img.shields.io/badge/Java-Spring_Boot-orange?style=for-the-badge&logo=springboot)
+![Vaadin](https://img.shields.io/badge/Vaadin-Flow_%2B_Vite-00b4f0?style=for-the-badge&logo=vaadin)
+![Architecture](https://img.shields.io/badge/Architecture-Hexagonal-purple?style=for-the-badge)
+![Tests](https://img.shields.io/badge/Tests-Passing-success?style=for-the-badge&logo=junit5)
 
-> **Una aplicación de productividad que combina la técnica Pomodoro con un ambiente Lofi inmersivo para maximizar la concentración.**
+**Aplicación Fullstack de productividad que fusiona la técnica Pomodoro con un entorno Lofi inmersivo.**
 
-🔗 **Demo en vivo:** [https://pomodoro-lofi.onrender.com/](https://pomodoro-lofi.onrender.com/)
-
----
-
-## 📸 Vista Previa
-
-![Interfaz de Usuario](Interfaz.png)
-
+🔗 **Live Demo:** [https://pomodoro-lofi.onrender.com/](https://pomodoro-lofi.onrender.com/)
 
 ---
 
-## 🚀 Características Principales
+## 🏗️ Arquitectura y Diseño de Software
 
-Esta aplicación no es solo un temporizador; es un **espacio de trabajo** completo diseñado con tecnologías Enterprise Java modernas.
+Este proyecto ha sido diseñado siguiendo estrictos estándares de la industria para garantizar escalabilidad y mantenibilidad:
 
-- **⏱️ Gestión de Tiempo Precisa**: Temporizador con estados (Trabajo/Descanso) y controles de Inicio, Pausa y Reinicio.
-- **🎧 Ambiente Sonoro Integrado**: Reproductor de música Lofi (YouTube integration) embebido para evitar distracciones externas.
-- **⚙️ Configuración Personalizada**: Input dinámico para modificar la duración de las sesiones sobre la marcha.
-- **📱 Diseño Reactivo**: Interfaz construida con **Vaadin Flow**, garantizando una experiencia SPA (Single Page Application) fluida sin necesidad de un framework de JS externo.
+### 🔹 Arquitectura Hexagonal (Ports & Adapters)
+El código no está acoplado al framework. Se ha separado en capas claras para proteger la lógica de negocio:
+- **Domain**: Núcleo puro de la aplicación (Entidades y Lógica del temporizador) sin dependencias externas.
+- **Application**: Casos de uso y orquestación de servicios.
+- **Infrastructure**: Implementación técnica (UI Web, Configuración).
+
+### 🔹 Principios SOLID
+Se han aplicado principios de diseño para lograr un código limpio:
+- **Single Responsibility**: Cada clase (Servicios, Vistas, Estados) tiene una única responsabilidad definida.
+- **Dependency Injection**: Uso del contenedor de Spring para desacoplar componentes y facilitar el testing.
+
+### 🔹 Calidad y Testing
+- **Unit Testing**: Cobertura de tests unitarios (JUnit 5 + Mockito) para validar la lógica crítica del dominio y asegurar que el temporizador funciona con precisión milimétrica.
 
 ---
 
-## 🏗️ Arquitectura y Diseño Técnico
+## 🔒 Seguridad y Tecnología Frontend
 
-Este proyecto destaca por su enfoque en la **calidad del código** y la **escalabilidad**, implementando una arquitectura profesional:
+A diferencia de una SPA tradicional insegura, este proyecto aprovecha la potencia de **Vaadin Flow**:
 
-- **Arquitectura Hexagonal (Puertos y Adaptadores)**:
-  - `Domain`: Lógica de negocio pura (Entidades `PomodoroState`, Reglas de tiempo).
-  - `Application`: Casos de uso y servicios (`PomodoroService`).
-  - `Infrastructure`: Adaptadores de entrada (UI con Vaadin) y configuración.
-- **Separación de Intereses**: El código desacopla la lógica del temporizador de la vista, permitiendo pruebas unitarias más sencillas y mantenimiento a largo plazo.
-- **Gestión de Estado**: Uso de patrones de diseño para manejar el estado de la sesión (corriendo, pausado, finalizado) de forma robusta.
+- **Server-Side Security**: Toda la lógica de negocio y el estado de la sesión residen en el servidor (Java). El cliente (navegador) no manipula la lógica, lo que elimina vulnerabilidades comunes de validación en frontend.
+- **Optimización Moderna**: Aunque la lógica es Java, Vaadin compila el frontend usando **Vite**, generando un bundle de JavaScript/TypeScript optimizado y ligero para una experiencia de usuario fluida y reactiva.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
 - **Backend**: Java 21, Spring Boot 3.
-- **Frontend**: Vaadin Flow (Java-based UI), CSS3 personalizado.
-- **Build Tool**: Maven.
-- **Containerización**: Docker (Dockerfile optimizado para producción).
-- **Despliegue**: Render Cloud.
+- **Frontend**: Vaadin Flow 24 (Java-based) .
+- **Testing**: JUnit 5, Mockito.
+- **Despliegue**: Docker & Render.
 
 ---
 
-## 💻 Instalación y Ejecución Local
+## 📸 Vista Previa
 
-Puedes ejecutar este proyecto de dos formas:
-
-### Opción A: Usando Maven
-```bash
-git clone [https://github.com/christianfernandezdev/Pomodoro.git](https://github.com/christianfernandezdev/Pomodoro.git)
-cd Pomodoro
-./mvnw spring-boot:run
-http://localhost:8080
+![Interfaz de Usuario](Interfaz.png)
